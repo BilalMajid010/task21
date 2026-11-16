@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Object-oriented task and project management application.">
+    <title>TaskFlow - Project Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="js/app.js"></script>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <a href="#" class="brand">task<span>flow</span><b>.</b></a>
+
+            <div class="sidebar-label">WORKSPACE</div>
+
+            <nav class="side-nav">
+                <a href="#dashboard" class="nav-item active">
+                    <span>▦</span> Dashboard
+                </a>
+                <a href="#tasks" class="nav-item">
+                    <span>☷</span> All Tasks
+                </a>
+            </nav>
+
+            <div class="sidebar-heading">
+                <span>MY PROJECTS</span>
+                <button class="icon-button" id="addProjectButton" aria-label="Add project">+</button>
+            </div>
+
+            <div class="project-nav" id="projectNav"></div>
+
+            <div class="sidebar-bottom">
+                <div class="user-profile">
+                    <div class="avatar avatar-purple">BM</div>
+                    <div>
+                        <strong>Bilal Majid</strong>
+                        <span>Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content" id="dashboard">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="icon-button mobile-menu" id="mobileMenu" aria-label="Open navigation">☰</button>
+                    <div>
+                        <span class="breadcrumb">Workspace / <strong>Overview</strong></span>
+                        <h1>Project Dashboard</h1>
+                    </div>
+                </div>
+
+                <div class="topbar-actions">
+                    <span class="today-label" id="todayLabel"></span>
+                    <button class="button button-primary" id="newTaskButton">+ New Task</button>
+                </div>
+            </header>
+
+            <section class="welcome-panel">
+                <div>
+                    <span class="eyebrow">YOUR WORKSPACE</span>
+                    <h2>Make progress, <span>one task at a time.</span></h2>
+                    <p>Organize your projects, manage your tasks, and keep track of your progress.</p>
+                </div>
+                <div class="welcome-decoration">TF</div>
+            </section>
+
+            <section class="stats-grid" id="statsGrid">
+                <article class="stat-card">
+                    <div class="stat-icon purple">▦</div>
+                    <span>Total Tasks</span>
+                    <strong id="totalTasks">0</strong>
+                    <small>Across all projects</small>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon green">✓</div>
+                    <span>Completed</span>
+                    <strong id="completedTasks">0</strong>
+                    <small>Successfully finished</small>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon orange">◷</div>
+                    <span>Pending</span>
+                    <strong id="pendingTasks">0</strong>
+                    <small>Still in progress or open</small>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon red">!</div>
+                    <span>Overdue</span>
+                    <strong id="overdueTasks">0</strong>
+                    <small>Past their due date</small>
+                </article>
+            </section>
+
+            <section class="project-summary-section">
+                <div class="section-heading">
+                    <div>
+                        <span class="eyebrow">PROJECT OVERVIEW</span>
+                        <h2>Your Projects</h2>
+                    </div>
+                    <span class="total-hours" id="totalHours">0 estimated hours</span>
+                </div>
+
+                <div class="project-cards" id="projectCards"></div>
+            </section>
+
+            <section class="tasks-section" id="tasks">
+                <div class="section-heading task-heading">
+                    <div>
+                        <span class="eyebrow">TASK MANAGEMENT</span>
+                        <h2>All Tasks</h2>
+                        <p>Search, filter, assign, and manage your work.</p>
+                    </div>
+                    <button class="button button-outline" id="clearFiltersButton">Clear Filters</button>
+                </div>
+
+                <div class="filter-panel">
+                    <div class="search-box">
+                        <span>⌕</span>
+                        <input type="search" id="searchInput" placeholder="Search tasks...">
+                    </div>
+
+                    <select id="statusFilter" aria-label="Filter by status">
+                        <option value="all">All Statuses</option>
+                        <option value="todo">To Do</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+
+                    <select id="priorityFilter" aria-label="Filter by priority">
+                        <option value="all">All Priorities</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+
+                    <select id="projectFilter" aria-label="Filter by project">
+                        <option value="all">All Projects</option>
+                    </select>
+
+                    <select id="userFilter" aria-label="Filter by assigned user">
+                        <option value="all">All Members</option>
+                    </select>
+                </div>
+
+                <div class="task-table-wrapper">
+                    <table class="task-table">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Project</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Due Date</th>
+                                <th>Assignees</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taskTableBody"></tbody>
+                    </table>
+                    <div class="empty-state hidden" id="emptyState">
+                        <span>☷</span>
+                        <h3>No tasks found</h3>
+                        <p>Try changing your filters or create a new task.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="activity-section">
+                <div class="section-heading">
+                    <div>
+                        <span class="eyebrow">RECENT UPDATES</span>
+                        <h2>Activity Log</h2>
+                    </div>
+                </div>
+                <div class="activity-list" id="activityList"></div>
+            </section>
+
+            <footer class="footer">
+                <span>TaskFlow © 2026</span>
+                <span>Built with HTML, CSS and Object-Oriented JavaScript</span>
+            </footer>
+        </main>
+    </div>
+
+    <div class="modal" id="taskModal" aria-hidden="true">
+        <div class="modal-backdrop" data-close-modal></div>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">TASK MANAGEMENT</span>
+                    <h2 id="taskModalTitle">Create New Task</h2>
+                </div>
+                <button class="icon-button" data-close-modal aria-label="Close modal">×</button>
+            </div>
+
+            <form id="taskForm">
+                <input type="hidden" id="taskId">
+
+                <div class="form-grid">
+                    <label class="form-field full-width">
+                        Task Title
+                        <input type="text" id="taskTitle" required maxlength="100" placeholder="Enter task title">
+                    </label>
+
+                    <label class="form-field full-width">
+                        Description
+                        <textarea id="taskDescription" rows="3" placeholder="Describe the task"></textarea>
+                    </label>
+
+                    <label class="form-field">
+                        Project
+                        <select id="taskProject" required></select>
+                    </label>
+
+                    <label class="form-field">
+                        Task Type
+                        <select id="taskType">
+                            <option value="development">Development</option>
+                            <option value="testing">Testing</option>
+                            <option value="documentation">Documentation</option>
+                        </select>
+                    </label>
+
+                    <label class="form-field">
+                        Priority
+                        <select id="taskPriority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </label>
+
+                    <label class="form-field">
+                        Status
+                        <select id="taskStatus">
+                            <option value="todo">To Do</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </label>
+
+                    <label class="form-field">
+                        Due Date
+                        <input type="date" id="taskDueDate" required>
+                    </label>
+
+                    <label class="form-field">
+                        Estimated Hours
+                        <input type="number" id="taskHours" min="0.5" max="1000" step="0.5" value="4" required>
+                    </label>
+
+                    <label class="form-field full-width">
+                        Assign Members
+                        <select id="taskAssignees" multiple size="3"></select>
+                        <small>Hold Ctrl (Windows) or Command (Mac) to select multiple members.</small>
+                    </label>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="button button-outline" data-close-modal>Cancel</button>
+                    <button type="submit" class="button button-primary" id="saveTaskButton">Create Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="detailModal" aria-hidden="true">
+        <div class="modal-backdrop" data-close-detail></div>
+        <div class="modal-content detail-modal-content" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">TASK DETAILS</span>
+                    <h2 id="detailTitle">Task details</h2>
+                </div>
+                <button class="icon-button" data-close-detail aria-label="Close details">×</button>
+            </div>
+            <div id="taskDetails"></div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
